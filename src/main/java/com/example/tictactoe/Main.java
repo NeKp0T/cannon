@@ -1,6 +1,9 @@
 package com.example.tictactoe;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,11 +11,13 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import static com.example.tictactoe.GameInstance.FIELD_SIZE;
 
 public class Main extends Application {
 
-    private final static int GRID_SIZE = 3;
     private final static int CELL_LENGTH = 200;
     private final GameInstance gameInstance = new GameInstance();
     private final Label statusLine = new Label();
@@ -34,34 +39,42 @@ public class Main extends Application {
         var root = new BorderPane();
 
         var table = new GridPane();
-        table.setPrefSize(CELL_LENGTH * GRID_SIZE, CELL_LENGTH * GRID_SIZE);
+        table.setPrefSize(CELL_LENGTH * FIELD_SIZE, CELL_LENGTH * FIELD_SIZE);
+        table.setAlignment(Pos.CENTER);
+        table.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        table.setPadding(new Insets(15));
 
-        for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            for (int j = 0; j < FIELD_SIZE; j++) {
 
                 var cell = new Cell(i, j);
-                cell.setTranslateX(j * CELL_LENGTH);
-                cell.setTranslateY(i * CELL_LENGTH);
 
-                table.getChildren().add(cell);
+                cell.setMaxWidth(Double.MAX_VALUE);
+                cell.setMaxHeight(Double.MAX_VALUE);
+                table.add(cell, i, j);
+                GridPane.setHgrow(cell, Priority.ALWAYS);
+                GridPane.setVgrow(cell, Priority.ALWAYS);
+
             }
         }
 
         root.setCenter(table);
 
-        var bottom = new HBox();
+        var bottom = new HBox(10);
         statusLine.setText(gameInstance.getStatus());
+        statusLine.setFont(new Font(30));
         bottom.getChildren().add(statusLine);
+
         root.setBottom(bottom);
 
         return root;
     }
 
-    private class Cell extends Pane {
+    private class Cell extends GridPane {
 
         private final Button button = new Button();
-        final int coordinateX;
-        final int coordinateY;
+        private final int coordinateX;
+        private final int coordinateY;
 
         private Cell(int coordinateX, int coordinateY) {
             this.coordinateX = coordinateX;
@@ -69,12 +82,12 @@ public class Main extends Application {
 
             setPrefSize(CELL_LENGTH, CELL_LENGTH);
 
-            button.setPrefSize(CELL_LENGTH, CELL_LENGTH);
             button.setOnAction(event -> {
                 try {
                     gameInstance.put(coordinateX, coordinateY);
                 } catch (ImpossibleMoveException e) {
-                    throw new RuntimeException(e);
+                    // Wrong move
+                    // Let's do nothing
                 }
 
                 draw();
@@ -85,7 +98,7 @@ public class Main extends Application {
 
         }
 
-        private void draw() {
+        public void draw() {
             switch(gameInstance.get(coordinateX, coordinateY)) {
                 case CROSS:
                     drawCross();
@@ -101,6 +114,7 @@ public class Main extends Application {
             double scale = 0.2f;
             Line line1 = new Line(scale * width, scale * height, (1 - scale) * width, (1 - scale) * height);
             Line line2 = new Line(scale * width, (1 - scale) * height, (1 - scale) * width, scale * height);
+
             getChildren().addAll(line1, line2);
         }
 
