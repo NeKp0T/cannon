@@ -92,6 +92,7 @@ class GameInstance {
                     case NOUGHTS_MOVE: return "Waiting for noughts' move";
                 }
         }
+        throw new RuntimeException("Case not implemented");
     }
 
     private boolean checkWon(int x, int y) {
