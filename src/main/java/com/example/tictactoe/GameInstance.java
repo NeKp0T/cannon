@@ -25,8 +25,8 @@ class GameInstance {
 
         public CellState putsOnBoard() {
             switch (this) {
-                case CROSS_MOVE: return NOUGHT;
-                case NOUGHTS_MOVE: return CROSS;
+                case CROSS_MOVE: return CROSS;
+                case NOUGHTS_MOVE: return NOUGHT;
             }
             throw new RuntimeException("Case not implemented");
         }
