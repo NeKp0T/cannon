@@ -10,7 +10,7 @@ class GameInstance {
         FREE, CROSS, NOUGHT
     }
     public enum GameState {
-        RUNNING, CROSS_WIN, NOUGHT_WIN;
+        RUNNING, CROSS_WIN, NOUGHT_WIN, DRAW;
     }
 
     public enum MoveOrder {
@@ -45,6 +45,7 @@ class GameInstance {
     private final CellState[][] board = new CellState[FIELD_SIZE][FIELD_SIZE];
     private MoveOrder currentPlayer = MoveOrder.CROSS_MOVE;
     private GameState state = RUNNING;
+    private int turnsMade = 0;
 
     GameInstance() {
         Arrays.stream(board).forEach(row -> Arrays.fill(row, FREE));
@@ -78,11 +79,19 @@ class GameInstance {
             throw new ImpossibleMoveException();
         }
 
+        turnsMade++;
+
         board[x][y] = currentPlayer.putsOnBoard();
         if (checkWon(x, y)) {
             state = currentPlayer.winState();
             return true;
         }
+
+        if (turnsMade == FIELD_SIZE * FIELD_SIZE) {
+            state = DRAW;
+            return true;
+        }
+
         currentPlayer = currentPlayer.nextMove();
         return false;
     }
@@ -96,6 +105,7 @@ class GameInstance {
                     case CROSS_MOVE: return "Waiting for crosses' move";
                     case NOUGHTS_MOVE: return "Waiting for noughts' move";
                 }
+            case DRAW: return "Draw!";
         }
         throw new RuntimeException("Case not implemented");
     }
