@@ -18,7 +18,7 @@ javafx {
     modules = [ 'javafx.controls' ]
 }
 
-mainClassName = 'Main'
+mainClassName = 'com.example.tictactoe.Main'
 
 dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.4.0-M1'
