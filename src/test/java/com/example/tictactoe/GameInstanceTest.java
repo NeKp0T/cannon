@@ -1,13 +1,12 @@
 package com.example.tictactoe;
 
-import org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameInstanceTest {
-    GameInstance game;
+    private GameInstance game;
 
     @BeforeEach
     void init() {
@@ -26,12 +25,16 @@ class GameInstanceTest {
 
     @Test
     void winsHorizontal() throws ImpossibleMoveException {
+        makeHorizontalCrossWin();
+        assertEquals(GameInstance.GameState.CROSS_WIN,  game.getState());
+    }
+
+    private void makeHorizontalCrossWin() throws ImpossibleMoveException {
         game.put(0, 0);
         game.put(1, 0);
         game.put(0, 1);
         game.put(1, 1);
         game.put(0, 2);
-        assertEquals(GameInstance.GameState.CROSS_WIN,  game.getState());
     }
 
 
@@ -91,7 +94,7 @@ class GameInstanceTest {
     }
 
     @Test
-    void testPutOutsideOfBoard() throws ImpossibleMoveException {
+    void testPutOutsideOfBoard() {
         assertThrows(IllegalArgumentException.class, () -> game.put(-1, 0));
         assertThrows(IllegalArgumentException.class, () -> game.put(0, -1));
         assertThrows(IllegalArgumentException.class, () -> game.put(3, 0));
@@ -99,16 +102,25 @@ class GameInstanceTest {
     }
 
     @Test
-    void testPutOnUsedCell() {
-
+    void testPutOnUsedCell() throws ImpossibleMoveException {
+        game.put(0, 0);
+        assertThrows(ImpossibleMoveException.class, () -> game.put(0, 0));
     }
 
     @Test
-    void getStatusWin() {
+    void testThrowsAfterGameEnded() throws ImpossibleMoveException {
+        makeDraw();
+        assertThrows(ImpossibleMoveException.class, () -> game.put(0, 0));
+    }
 
+    @Test
+    void getStatusWin() throws ImpossibleMoveException {
+        makeHorizontalCrossWin();
+        assertEquals(GameInstance.GameState.CROSS_WIN, game.getState());
     }
     @Test
-    void getStatusDraw() {
-
+    void getStatusDraw() throws ImpossibleMoveException {
+        makeDraw();
+        assertEquals(GameInstance.GameState.DRAW, game.getState());
     }
 }
