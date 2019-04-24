@@ -13,7 +13,7 @@ class GameInstance {
         RUNNING, CROSS_WIN, NOUGHT_WIN;
     }
 
-    private enum MoveOrder {
+    public enum MoveOrder {
         CROSS_MOVE, NOUGHTS_MOVE;
         public MoveOrder nextMove() {
             switch (this) {
@@ -33,14 +33,14 @@ class GameInstance {
 
         public GameState winState() {
             switch (this) {
-                case CROSS_MOVE: return NOUGHT_WIN;
-                case NOUGHTS_MOVE: return CROSS_WIN;
+                case CROSS_MOVE: return CROSS_WIN;
+                case NOUGHTS_MOVE: return NOUGHTS_MOVE;
             }
             throw new RuntimeException("Case not implemented");
         }
     }
 
-    private static final int FIELD_SIZE = 3;
+    public static final int FIELD_SIZE = 3;
 
     private final CellState[][] board = new CellState[FIELD_SIZE][FIELD_SIZE];
     private MoveOrder currentPlayer = MoveOrder.CROSS_MOVE;
@@ -58,6 +58,10 @@ class GameInstance {
 
     GameState getState() {
         return state;
+    }
+
+    MoveOrder getMoveOrder() {
+        return currentPlayer;
     }
 
     /**
@@ -79,6 +83,7 @@ class GameInstance {
             state = currentPlayer.winState();
             return true;
         }
+        currentPlayer = currentPlayer.nextMove();
         return false;
     }
 
