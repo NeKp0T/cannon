@@ -34,7 +34,7 @@ class GameInstance {
         public GameState winState() {
             switch (this) {
                 case CROSS_MOVE: return CROSS_WIN;
-                case NOUGHTS_MOVE: return NOUGHTS_MOVE;
+                case NOUGHTS_MOVE: return NOUGHT_WIN;
             }
             throw new RuntimeException("Case not implemented");
         }
