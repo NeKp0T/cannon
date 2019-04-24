@@ -15,6 +15,7 @@ public class Main extends Application {
     private final static int GRID_SIZE = 3;
     private final static int CELL_LENGTH = 200;
     private final GameInstance gameInstance = new GameInstance();
+    private final Label statusLine = new Label();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -49,7 +50,8 @@ public class Main extends Application {
         root.setCenter(table);
 
         var bottom = new HBox();
-        bottom.getChildren().add(gameInstance.statusLine());
+        statusLine.setText(gameInstance.getStatus());
+        bottom.getChildren().add(statusLine);
         root.setBottom(bottom);
 
         return root;
@@ -69,8 +71,14 @@ public class Main extends Application {
 
             button.setPrefSize(CELL_LENGTH, CELL_LENGTH);
             button.setOnAction(event -> {
-                gameInstance.put(coordinateX, coordinateY);
+                try {
+                    gameInstance.put(coordinateX, coordinateY);
+                } catch (ImpossibleMoveException e) {
+                    throw new RuntimeException(e);
+                }
+
                 draw();
+                statusLine.setText(gameInstance.getStatus());
 
             });
             getChildren().add(button);
@@ -96,7 +104,7 @@ public class Main extends Application {
             getChildren().addAll(line1, line2);
         }
 
-        public void drawCircle() {
+        private void drawCircle() {
             double w = getWidth(), h = getHeight();
             double radius = 0.4f;
             Ellipse ellipse = new Ellipse(w / 2, h / 2, radius * w, radius * h);
