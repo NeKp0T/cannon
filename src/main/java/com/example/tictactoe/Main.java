@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import static com.example.tictactoe.GameInstance.FIELD_SIZE;
@@ -70,7 +71,7 @@ public class Main extends Application {
         return root;
     }
 
-    private class Cell extends GridPane {
+    private class Cell extends Pane {
 
         private final Button button = new Button();
         private final int coordinateX;
@@ -94,7 +95,12 @@ public class Main extends Application {
                 statusLine.setText(gameInstance.getStatus());
 
             });
+            button.setPrefSize(CELL_LENGTH, CELL_LENGTH);
+            button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            button.prefHeightProperty().bind(heightProperty());
+            button.prefWidthProperty().bind(widthProperty());
             getChildren().add(button);
+
 
         }
 
@@ -115,7 +121,18 @@ public class Main extends Application {
             Line line1 = new Line(scale * width, scale * height, (1 - scale) * width, (1 - scale) * height);
             Line line2 = new Line(scale * width, (1 - scale) * height, (1 - scale) * width, scale * height);
 
-            getChildren().addAll(line1, line2);
+            line1.startXProperty().bind(widthProperty().divide(1 / scale));
+            line1.startYProperty().bind(heightProperty().divide(1 / scale));
+            line1.endXProperty().bind(widthProperty().divide(1 / (1 - scale)));
+            line1.endYProperty().bind(heightProperty().divide(1 / (1 - scale)));
+            getChildren().add(line1);
+
+            line2.startXProperty().bind(widthProperty().divide(1 / scale));
+            line2.startYProperty().bind(heightProperty().divide(1 / (1 - scale)));
+            line2.endXProperty().bind(widthProperty().divide(1 / (1 - scale)));
+            line2.endYProperty().bind(heightProperty().divide(1 / scale));
+            getChildren().add(line2);
+
         }
 
         private void drawCircle() {
@@ -125,6 +142,11 @@ public class Main extends Application {
             ellipse.setStroke(Color.BLACK);
             ellipse.setFill(null);
             getChildren().add(ellipse);
+
+            ellipse.centerXProperty().bind(widthProperty().divide(2));
+            ellipse.centerYProperty().bind(heightProperty().divide(2));
+            ellipse.radiusXProperty().bind(widthProperty().divide(1 / radius));
+            ellipse.radiusYProperty().bind(heightProperty().divide(1 / radius));
         }
 
 
