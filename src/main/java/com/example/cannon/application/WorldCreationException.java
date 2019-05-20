@@ -1,7 +1,11 @@
-package com.example.cannon;
+package com.example.cannon.application;
 
-public class GameException extends Exception {
-    public GameException(String s) {
+/**
+ * An exception thrown if a world could not be created by GameInstance.
+ * Possible cause - too many players.
+ */
+public class WorldCreationException extends Exception {
+    public WorldCreationException(String s) {
         super(s);
     }
 }
