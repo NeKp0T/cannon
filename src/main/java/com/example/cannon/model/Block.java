@@ -1,6 +1,8 @@
 package com.example.cannon.model;
 
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -12,7 +14,7 @@ class Block {
     /**
      * Constructs a new block with provided type
      */
-    public Block(BlockType type) {
+    public Block(@NotNull BlockType type) {
         this.type = type;
     }
 
@@ -26,7 +28,7 @@ class Block {
     /**
      * Sets new type to a block
      */
-    public void updateType(BlockType newType) {
+    public void updateType(@NotNull BlockType newType) {
         type = newType;
         if (onUpdate != null) {
             onUpdate.accept(type);
@@ -36,6 +38,7 @@ class Block {
     /**
      * @return type of a block
      */
+    @NotNull
     public BlockType getType() {
         return type;
     }
@@ -49,7 +52,7 @@ class Block {
     }
 
     private BlockType type; // TODO enum
-    private Consumer<BlockType> onUpdate;
+    private @Nullable Consumer<BlockType> onUpdate;
 
     public enum BlockType {
         EMPTY(true, Color.TRANSPARENT),

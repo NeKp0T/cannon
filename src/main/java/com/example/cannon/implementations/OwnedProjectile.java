@@ -3,7 +3,6 @@ package com.example.cannon.implementations;
 import com.example.cannon.model.Projectile;
 import com.example.cannon.model.Unit;
 import com.example.cannon.model.Vector2;
-import com.example.cannon.model.World;
 
 /**
  * A projectile that has a Unit owner with whom it does not collide.
@@ -30,7 +29,7 @@ public abstract class OwnedProjectile extends Projectile {
      * @return always true in this implementation
      */
     @Override
-    protected final boolean onTerrainCollision() {
+    protected boolean onTerrainCollision() {
         return true;
     }
 
@@ -39,7 +38,7 @@ public abstract class OwnedProjectile extends Projectile {
      * @return returns <code>true</code> if unit it collided with is not it's owner
      */
     @Override
-    protected final boolean onUnitCollision(Unit unit) {
+    protected boolean onUnitCollision(Unit unit) {
         return unit != owner;
     }
 
