@@ -62,7 +62,7 @@ Gradle and Maven with auto-import
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.nar
 *.ear
@@ -84,7 +84,7 @@ Gradle and Maven with auto-import
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.nar
 *.ear
